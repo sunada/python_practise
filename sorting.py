@@ -132,42 +132,6 @@ def heap(origin):
     adjust(origin, sort)
     return sort 
 
-def counting(origin):
-    cnt = len(origin)
-    count = [0] * cnt
-    for i in range(cnt):
-        for j in range(cnt):
-            if origin[i] < origin[j]:
-                count[i] += 1
-
-    sort = [-1] * cnt
-    for i in range(cnt):
-        if sort[count[i]] == -1:
-            sort[count[i]] = origin[i]
-        else:
-            sort[count[i] + 1] = origin[i]
-    return sort
-
-def radix(origin):
-    radix = 10
-    base = 1
-    mx = max(origin)
-
-    while mx%radix/base > 0:
-        bullet = [ [] for x in range(10)]
-        for x in origin:
-            index = x % radix / base
-            bullet[index].append(x)
-
-        origin = []
-        for i in bullet[::-1]:
-            origin.extend(i)
-        
-        radix *= 10
-        base *= 10
-    
-    return origin
-
 def merge_sort(arr):
     def merge(arr1, arr2):
         i = 0
@@ -193,6 +157,63 @@ def merge_sort(arr):
     tmp_a = merge_sort(arr[0:length/2])
     tmp_b = merge_sort(arr[length/2:])
     return merge(tmp_a, tmp_b)
+
+def counting(origin):
+    mn = min(origin)
+    buckets = [0] * (max(origin) - mn + 1)
+    length = len(origin)
+    for i in range(length):
+        buckets[origin[i] - mn] += 1
+
+    res = [-1] * len(origin)
+    for x in origin:
+        cnt = 0
+        i = 0
+        flag = mn
+        while flag < x:
+            cnt += buckets[i]
+            i += 1
+            flag += 1
+        while res[length - 1 - cnt] != -1:
+            cnt += 1
+        res[length - 1- cnt] = x
+    return res
+
+def radix(origin):
+    radix = 10
+    base = 1
+    mx = max(origin)
+
+    while mx%radix/base > 0:
+        bullet = [ [] for x in range(10)]
+        for x in origin:
+            index = x % radix / base
+            bullet[index].append(x)
+
+        origin = []
+        for i in bullet[::-1]:
+            origin.extend(i)
+        
+        radix *= 10
+        base *= 10
+    
+    return origin
+
+def bucket(origin):
+    barrel = [ [] for x in range(10)]
+    mx = max(origin)
+    mn = min(origin)
+    gap = (mx - mn) / 10 + 1
+
+    for x in origin:
+        barrel[(x - mn) / gap].append(x)
+    print barrel
+
+    sort = []
+    for x in barrel[::-1]:
+        counting(x)
+        sort.extend(x)
+    return sort
 
 if __name__ == '__main__':
     origin = [6, 6, 7, 5, 3, 2, 4, 1, 8, 9, 0]
@@ -248,3 +269,6 @@ if __name__ == '__main__':
     cost = time.time() - start
     print 'cost %d seconds' %cost
     print 'after sort (merge):  ', sort
+
+    sort = bucket(origin[:])
+    print 'after sort (bucket):     ', sort
