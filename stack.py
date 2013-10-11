@@ -11,29 +11,29 @@ class Stack(object):
             raise Exception("StackWillOverFlow")
         self.size = size
     
-    def isFull(self):
+    def is_full(self):
         return True if self.size == self.top + 1 else False
 
-    def isEmpty(self):
+    def is_empty(self):
         return True if self.top == -1 else False
 
     def push(self, data):
-        if self.isFull():
+        if self.is_full():
             raise Exception("StackOverFlow")
             return
         self.stack.append(data)
         self.top += 1
 
     def pop(self):
-        if self.isEmpty():
-            raise Exception("StackIsEmpty")
+        if self.is_empty():
+            raise Exception("Stackis_empty")
             return
         self.top -= 1
         return self.stack.pop()
     
     def top(self):
-        if self.isEmpty():
-            raise Exception("StackIsEmpty")
+        if self.is_empty():
+            raise Exception("Stackis_empty")
             return -1
         return self.stack[self.top]
 
@@ -62,7 +62,7 @@ def test_stack(data):
     else:
         stack.show()
 
-    while not stack.isEmpty():
+    while not stack.is_empty():
         stack.pop()
     stack.show()
 
