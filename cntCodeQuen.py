@@ -5,7 +5,7 @@ import sys
 def cntLines(dirName, cnt = 0):
 	files = os.listdir(dirName)
 	for file in files:
-		filename = dirName + '/' + file
+		filename = dirName + os.sep + file
 		print filename
 		if os.path.isdir(filename):
 			cnt += cntLines(filename, cnt)
